@@ -11,9 +11,10 @@
       <img alt="Reddit post" src="https://img.shields.io/badge/post-reddit?style=for-the-badge&label=Reddit&color=FF5700"/>
     </a>
   </p>
-  <div><img src="" alt="Screenshot: ccusage.nvim example"></div>
+  <div><img width="650" alt="Screenshot: ccusage.nvim example" src="https://github.com/user-attachments/assets/bb160e3c-80d0-4249-87fb-e270ab967b84" /></div>
   <p><em>Track Claude Code usage in Neovim</em></p>
 </div>
+
 
 ---
 
