@@ -1,12 +1,12 @@
 ---Default formatter for ccusage lualine component
 ---@param context CCUsage.FormatterContext formatter context with data and stats
----@return string|nil formatted display string or nil to hide component
+---@return string? formatted display string or nil to hide component
 return function(context)
   if not context or not context.stats then
     return nil
   end
 
-  local stats = context.stats
+  local stats = context.stats or {}
 
   -- Calculate proximity to limit (80% threshold for "near limit")
   local is_near_limit = stats.usage_ratio >= 0.8

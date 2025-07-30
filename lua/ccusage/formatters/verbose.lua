@@ -1,6 +1,3 @@
----@class VerboseFormatter
-local M = {}
-
 ---Format tokens with K/M suffixes
 ---@param tokens number
 ---@return string
@@ -38,7 +35,7 @@ end
 ---Format detailed usage statistics for verbose display
 ---@param context CCUsage.FormatterContext Context with data and stats
 ---@return string? Formatted verbose statistics string, or nil if data unavailable
-M.format = function(context)
+return function(context)
   if not context or not context.data or not context.stats then
     return nil
   end
@@ -120,5 +117,3 @@ M.format = function(context)
 
   return table.concat(lines, "\n")
 end
-
-return M.format

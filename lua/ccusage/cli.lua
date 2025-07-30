@@ -11,7 +11,7 @@ local cache = {
 }
 
 ---Simple jobstart to get ccusage blocks
----@return CCUsage.Data|nil
+---@return CCUsage.Data?
 M.ccusage_blocks = function()
   -- Check cache first (5 second cache)
   ---@diagnostic disable-next-line: undefined-field
@@ -67,7 +67,7 @@ M.is_available = function()
 end
 
 ---Force refresh
----@return CCUsage.Data|nil
+---@return CCUsage.Data?
 M.refresh_blocks = function()
   cache.data = nil
   cache.last_update = 0

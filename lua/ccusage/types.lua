@@ -21,18 +21,18 @@
 
 ---@class CCUsage.DefaultOptions
 ---@field ccusage_cmd string ccusage command to run
----@field formatter fun(context: CCUsage.FormatterContext): string|nil function to format context data for display
+---@field formatter fun(context: CCUsage.FormatterContext): string? function to format context data for display
 
 ---@class CCUsage.Options
 ---@field ccusage_cmd string ccusage command to run
----@field formatter fun(context: CCUsage.FormatterContext): string|nil function to format context data for display
+---@field formatter fun(context: CCUsage.FormatterContext): string? function to format context data for display
 
 -- lua/ccusage/cli.lua ---------------------------------------------------------
 
 ---@class CCUsage.CLI
----@field ccusage_blocks fun(): CCUsage.Data|nil get ccusage blocks data
+---@field ccusage_blocks fun(): CCUsage.Data? get ccusage blocks data
 ---@field is_available fun(): boolean check if ccusage CLI is available
----@field refresh_blocks fun(): CCUsage.Data|nil force refresh ccusage blocks data
+---@field refresh_blocks fun(): CCUsage.Data? force refresh ccusage blocks data
 
 ---@class CCUsage.Block
 ---@field id string block identifier
@@ -73,11 +73,11 @@
 
 ---@class CCUsage.Utils
 ---@field command_exists fun(cmd: string): boolean? check if a command exists
----@field get_ccusage_version fun(): string|nil get ccusage version
+---@field get_ccusage_version fun(): string? get ccusage version
 ---@field parse_utc_iso8601 fun(str: string): number? parse ISO 8601 UTC timestamp to unix timestamp
 ---@field utc_to_local fun(utc_time: number, format?: string): string convert UTC time to local time string
 ---@field iso_to_local fun(iso_str?: string, format?: string): string? convert ISO 8601 UTC timestamp to local time string
----@field compute_stats fun(blocks_data: CCUsage.Data): CCUsage.Stats|nil compute stats from blocks data
+---@field compute_stats fun(blocks_data: CCUsage.Data): CCUsage.Stats? compute stats from blocks data
 
 -- lua/ccusage/health.lua -------------------------------------------------------
 

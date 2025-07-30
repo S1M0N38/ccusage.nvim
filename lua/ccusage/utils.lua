@@ -17,7 +17,7 @@ M.command_exists = function(cmd)
 end
 
 ---Get ccusage version
----@return string|nil version string or nil if not available
+---@return string? version string or nil if not available
 M.get_ccusage_version = function()
   local handle = io.popen("ccusage --version 2>/dev/null")
   if not handle then
@@ -89,7 +89,7 @@ end
 
 ---Compute stats from blocks data
 ---@param blocks_data CCUsage.Data blocks data from ccusage CLI
----@return CCUsage.Stats|nil computed stats or nil if no data
+---@return CCUsage.Stats? computed stats or nil if no data
 M.compute_stats = function(blocks_data)
   if not blocks_data or not blocks_data.blocks or #blocks_data.blocks == 0 then
     return nil
