@@ -1,0 +1,289 @@
+================================================================================
+INTRODUCTION                                                          *ccusage*
+
+ccusage.nvim is a minimal Neovim plugin that integrates the ccusage CLI tool
+into lualine statuslines. It provides real-time Claude Code usage monitoring
+displaying token counts and costs with customizable formatting.
+
+Track your Claude Code usage directly in Neovim's statusline to help manage
+API limits and costs. Perfect for users with Anthropic Pro subscriptions who
+need to monitor their usage strategically.
+
+Links:
+• Changelog: https://github.com/S1M0N38/ccusage.nvim/blob/main/CHANGELOG.md
+• License (MIT): https://github.com/S1M0N38/ccusage.nvim/blob/main/LICENSE
+
+Table of contents:
+
+1. FEATURES: What this plugin provides.                      |ccusage-features|
+2. REQUIREMENTS: Plugin dependencies and setup.          |ccusage-requirements|
+3. INSTALLATION: How to install the plugin.              |ccusage-installation|
+4. CONFIGURATION: Setup options and custom formatting.         |ccusage-config|
+5. COMMANDS: Commands provided by the plugin.                |ccusage-commands|
+6. API: Exposed functions and data access.                        |ccusage-api|
+7. TROUBLESHOOTING: Common issues and solutions.      |ccusage-troubleshooting|
+
+================================================================================
+FEATURES                                                     *ccusage-features*
+
+ccusage.nvim provides the following features:
+
+- Real-time Claude Code usage monitoring in statusline
+- Token count tracking with K/M suffixes for readability
+- Cost monitoring in USD
+- Active/inactive session indicators
+- Customizable display formatting with formatter functions
+- 5-second caching for optimal performance
+- Health check system for troubleshooting
+- Integration with any lualine statusline configuration
+
+================================================================================
+REQUIREMENTS                                             *ccusage-requirements*
+
+Before using ccusage.nvim, ensure you have the following:
+
+- Neovim ≥ 0.11
+- ccusage CLI tool (https://www.npmjs.com/package/ccusage)
+  Install with: `npm install -g ccusage`
+- lualine.nvim (https://github.com/nvim-lualine/lualine.nvim) - optional
+  Required for statusline integration
+
+================================================================================
+INSTALLATION                                             *ccusage-installation*
+
+Install ccusage.nvim using your preferred plugin manager:
+
+Using lazy.nvim: ~
+>lua
+    -- Install and configure ccusage.nvim
+    {
+      "S1M0N38/ccusage.nvim",
+      version = "0.*",
+      opts = {},
+    }
+<
+
+Enable the lualine component:
+>lua
+    -- Enable ccusage.nvim lualine component
+    {
+      "nvim-lualine/lualine.nvim",
+      opts = {
+        -- For example use in the lualine_x section
+        sections = { lualine_x = { "ccusage" } },
+        -- The rest of your lualine config ...
+      },
+    }
+<
+
+================================================================================
+CONFIGURATION                                                  *ccusage-config*
+
+                                                              *ccusage.setup()*
+ccusage.setup({opts}) ~
+
+The `ccusage.setup()` function configures the plugin with user-provided
+options. Available options:
+
+>lua
+  {
+    ccusage_cmd = "ccusage", -- ccusage command path
+    formatter = function(context)  -- Custom formatter function
+      -- context.data contains raw ccusage blocks data
+      -- context.stats contains pre-computed statistics
+      return "custom display"
+    end
+  }
+<
+
+The `formatter` function receives a context object with data and pre-computed
+statistics, and should return a string for display or nil to hide the
+component.
+
+Default format function behavior: ~
+The default format shows: `245.2K $12.34` with indicators for active/inactive
+Claude Code sessions, where:
+• Token count with K/M suffixes for readability
+• Cost in USD
+• Status indicators for session activity
+
+Custom formatting example: ~
+>lua
+  require("ccusage").setup({
+    formatter = function(context)
+      if not context.stats then
+        return nil
+      end
+
+      -- Simple token and cost display
+      return string.format("Tokens: %d | $%.2f", 
+        context.stats.tokens, context.stats.cost)
+    end
+  })
+<
+
+================================================================================
+COMMANDS                                                     *ccusage-commands*
+
+ccusage.nvim provides the following commands:
+
+:CCUsage ~
+  Show Claude Code usage statistics with detailed formatting in a Neovim
+  notification. Displays comprehensive usage information including token
+  counts, costs, and usage ratios with contextual warning levels.
+
+:checkhealth ccusage ~
+  Run health checks to verify ccusage.nvim setup and configuration.
+  This command validates:
+  - ccusage CLI availability and version
+  - Plugin configuration options
+  - Data access and JSON parsing
+  - lualine.nvim integration
+
+================================================================================
+API                                                               *ccusage-api*
+
+ccusage.nvim exposes a minimal API focused on setup and data access:
+
+                                                              *ccusage.setup()*
+ccusage.setup({opts}) ~
+  Set up the plugin with the given options. See |ccusage-config| for
+  available options. This is the only public function exposed by the
+  main module.
+
+Direct CLI access: ~
+
+For advanced usage or custom integrations, you can access the CLI module
+directly to get raw ccusage data:
+
+                                                 *ccusage.cli.ccusage_blocks()*
+require("ccusage.cli").ccusage_blocks() ~
+  Get raw ccusage blocks data - mirrors "ccusage blocks --json" exactly.
+  Returns the parsed JSON data or nil if unavailable.
+
+  Return format: ~
+>lua
+    {
+      blocks = {
+        {
+          id = "block-id",
+          startTime = "2024-01-01T00:00:00.000Z",
+          endTime = "2024-01-01T01:00:00.000Z",
+          actualEndTime = "2024-01-01T01:00:00.000Z",
+          isActive = true,
+          tokenCounts = {
+            inputTokens = 1000,
+            outputTokens = 2000,
+            cacheCreationInputTokens = 500,
+            cacheReadInputTokens = 300,
+          },
+          costUSD = 5.25,
+          models = {"claude-3-5-sonnet-20241022"},
+        },
+        -- ... more blocks
+      }
+    }
+<
+
+                                         *ccusage.data.get_formatter_context()*
+require("ccusage.data").get_formatter_context() ~
+  Get formatter context with both raw data and computed statistics.
+  Returns context object with data and stats fields, or error information.
+
+  Return format: ~
+>lua
+    {
+      data = {
+        blocks = { ... }  -- Raw ccusage blocks data
+      },
+      stats = {
+        max_tokens = 8192,
+        tokens = 1024,
+        usage_ratio = 0.125,
+        start_time = 1609459200,
+        end_time = 1609462800,
+        cost = 0.05,
+        time_ratio = 0.8,
+      }
+    }
+<
+
+                                                   *ccusage.cli.is_available()*
+require("ccusage.cli").is_available() ~
+  Check if ccusage CLI is available and working. Returns boolean.
+
+Usage example: ~
+>lua
+    -- Using raw CLI data
+    local cli = require("ccusage.cli")
+    local blocks_data = cli.ccusage_blocks()
+    
+    if blocks_data and blocks_data.blocks then
+      for _, block in ipairs(blocks_data.blocks) do
+        if block.isActive then
+          print("Active session cost: $" .. (block.costUSD or 0))
+        end
+      end
+    end
+
+    -- Using formatter context (recommended)
+    local data = require("ccusage.data")
+    local context = data.get_formatter_context()
+    
+    if context.stats then
+      print(string.format("Usage: %d/%d tokens (%.1f%%)", 
+        context.stats.tokens, 
+        context.stats.max_tokens, 
+        context.stats.usage_ratio * 100))
+    end
+<
+
+================================================================================
+TROUBLESHOOTING                                       *ccusage-troubleshooting*
+
+First, run the health check to identify issues:
+>vim
+  :checkhealth ccusage
+<
+
+If you encounter problems, follow these steps to reproduce the issue
+in a clean environment:
+
+1. Clone ccusage.nvim and cd into ccusage.nvim
+2. Run `nvim -u repro/repro.lua`
+3. Run `:checkhealth ccusage`
+4. Try to reproduce the issue
+5. Report the repro.lua and logs from .repro directory
+
+Common Issues: ~
+
+Issue: Component not showing in statusline ~
+• Ensure ccusage CLI is installed: `npm install -g ccusage`
+• Check health: `:checkhealth ccusage`
+• Ensure lualine is configured with the "ccusage" component
+• Verify ccusage has data: run `ccusage blocks --json` in terminal
+
+Issue: "ccusage command not found" error ~
+• Install ccusage globally: `npm install -g ccusage`
+• Verify PATH includes npm global binaries
+• Set custom command path: `ccusage_cmd = "/full/path/to/ccusage"`
+
+Issue: No usage data displayed ~
+• Use Claude Code to generate some usage data first
+• Run `:CCUsage` to check if data is available
+• Verify ccusage CLI returns data: `ccusage blocks --json`
+
+Manual Testing: ~
+
+Display usage statistics:
+>vim
+  :CCUsage
+<
+
+Test CLI data access:
+>vim
+  :lua print(vim.inspect(require("ccusage.cli").ccusage_blocks()))
+<
+
+================================================================================
+vim:tw=78:ts=8:et:ft=help:norl:
