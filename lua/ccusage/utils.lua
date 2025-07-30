@@ -2,8 +2,8 @@
 local M = {}
 
 ---Check if a command exists
----@param cmd string: command to check
----@return boolean?: true if command exists, false/nil if not
+---@param cmd string command to check
+---@return boolean? true if command exists, false/nil if not
 M.command_exists = function(cmd)
   local handle = io.popen("command -v " .. cmd .. " 2>/dev/null")
   if not handle then
@@ -17,7 +17,7 @@ M.command_exists = function(cmd)
 end
 
 ---Get ccusage version
----@return string|nil: version string or nil if not available
+---@return string|nil version string or nil if not available
 M.get_ccusage_version = function()
   local handle = io.popen("ccusage --version 2>/dev/null")
   if not handle then
@@ -35,8 +35,8 @@ M.get_ccusage_version = function()
 end
 
 ---Convert ISO 8601 UTC timestamp to Lua time table
----@param str string: ISO 8601 timestamp string (e.g., "2025-07-29T06:00:00.000Z")
----@return number?: Unix timestamp or nil on error
+---@param str string ISO 8601 timestamp string (e.g., "2025-07-29T06:00:00.000Z")
+---@return number? Unix timestamp or nil on error
 M.parse_utc_iso8601 = function(str)
   if not str then
     return nil
@@ -59,9 +59,9 @@ M.parse_utc_iso8601 = function(str)
 end
 
 ---Convert UTC time to local time string
----@param utc_time number: Unix timestamp in UTC
----@param format? string: Optional format string (defaults to "%H")
----@return string: Formatted local time string
+---@param utc_time number Unix timestamp in UTC
+---@param format? string Optional format string (defaults to "%H")
+---@return string Formatted local time string
 M.utc_to_local = function(utc_time, format)
   format = format or "%H"
   local utc_offset = os.difftime(os.time(), os.time(os.date("!*t"))) ---@diagnostic disable-line: param-type-mismatch
@@ -71,9 +71,9 @@ M.utc_to_local = function(utc_time, format)
 end
 
 ---Convert ISO 8601 UTC timestamp string directly to local time string
----@param iso_str? string: ISO 8601 timestamp string
----@param format? string: Optional format string (defaults to "%H")
----@return string?: Formatted local time string or nil on error
+---@param iso_str? string ISO 8601 timestamp string
+---@param format? string Optional format string (defaults to "%H")
+---@return string? Formatted local time string or nil on error
 M.iso_to_local = function(iso_str, format)
   if not iso_str then
     return nil
@@ -88,8 +88,8 @@ M.iso_to_local = function(iso_str, format)
 end
 
 ---Compute stats from blocks data
----@param blocks_data CCUsage.Data: blocks data from ccusage CLI
----@return CCUsage.Stats|nil: computed stats or nil if no data
+---@param blocks_data CCUsage.Data blocks data from ccusage CLI
+---@return CCUsage.Stats|nil computed stats or nil if no data
 M.compute_stats = function(blocks_data)
   if not blocks_data or not blocks_data.blocks or #blocks_data.blocks == 0 then
     return nil
