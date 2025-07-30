@@ -10,8 +10,8 @@ API limits and costs. Perfect for users with Anthropic Pro subscriptions who
 need to monitor their usage strategically.
 
 Links:
-• Changelog: https://github.com/S1M0N38/ccusage.nvim/blob/main/CHANGELOG.md
-• License (MIT): https://github.com/S1M0N38/ccusage.nvim/blob/main/LICENSE
+- Changelog: https://github.com/S1M0N38/ccusage.nvim/blob/main/CHANGELOG.md
+- License (MIT): https://github.com/S1M0N38/ccusage.nvim/blob/main/LICENSE
 
 Table of contents:
 
@@ -101,11 +101,11 @@ statistics, and should return a string for display or nil to hide the
 component.
 
 Default format function behavior: ~
-The default format shows: `245.2K $12.34` with indicators for active/inactive
-Claude Code sessions, where:
-• Token count with K/M suffixes for readability
-• Cost in USD
-• Status indicators for session activity
+The default format shows: `time 75% | tok 45%` with color indicators based on
+token usage, where:
+- Time percentage of current session elapsed
+- Token usage percentage of cycle limit
+- Color coding for token ratio: red (>100%), yellow (≥80%), default (<80%)
 
 Custom formatting example: ~
 >lua
@@ -217,7 +217,7 @@ Usage example: ~
     -- Using raw CLI data
     local cli = require("ccusage.cli")
     local blocks_data = cli.ccusage_blocks()
-    
+
     if blocks_data and blocks_data.blocks then
       for _, block in ipairs(blocks_data.blocks) do
         if block.isActive then
@@ -229,11 +229,11 @@ Usage example: ~
     -- Using formatter context (recommended)
     local data = require("ccusage.data")
     local context = data.get_formatter_context()
-    
+
     if context.stats then
       print(string.format("Usage: %d/%d tokens (%.1f%%)", 
-        context.stats.tokens, 
-        context.stats.max_tokens, 
+        context.stats.tokens,
+        context.stats.max_tokens,
         context.stats.usage_ratio * 100))
     end
 <
@@ -258,20 +258,20 @@ in a clean environment:
 Common Issues: ~
 
 Issue: Component not showing in statusline ~
-• Ensure ccusage CLI is installed: `npm install -g ccusage`
-• Check health: `:checkhealth ccusage`
-• Ensure lualine is configured with the "ccusage" component
-• Verify ccusage has data: run `ccusage blocks --json` in terminal
+- Ensure ccusage CLI is installed: `npm install -g ccusage`
+- Check health: `:checkhealth ccusage`
+- Ensure lualine is configured with the "ccusage" component
+- Verify ccusage has data: run `ccusage blocks --json` in terminal
 
 Issue: "ccusage command not found" error ~
-• Install ccusage globally: `npm install -g ccusage`
-• Verify PATH includes npm global binaries
-• Set custom command path: `ccusage_cmd = "/full/path/to/ccusage"`
+- Install ccusage globally: `npm install -g ccusage`
+- Verify PATH includes npm global binaries
+- Set custom command path: `ccusage_cmd = "/full/path/to/ccusage"`
 
 Issue: No usage data displayed ~
-• Use Claude Code to generate some usage data first
-• Run `:CCUsage` to check if data is available
-• Verify ccusage CLI returns data: `ccusage blocks --json`
+- Use Claude Code to generate some usage data first
+- Run `:CCUsage` to check if data is available
+- Verify ccusage CLI returns data: `ccusage blocks --json`
 
 Manual Testing: ~
 
