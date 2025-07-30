@@ -32,7 +32,7 @@ local function format_time(timestamp)
   if not timestamp or timestamp == 0 then
     return "Unknown"
   end
-  return os.date("%Y-%m-%d %H:%M:%S", timestamp)
+  return os.date("%Y-%m-%d %H:%M:%S", timestamp) ---@diagnostic disable-line: return-type-mismatch
 end
 
 ---Format detailed usage statistics for verbose display
@@ -43,8 +43,8 @@ M.format = function(context)
     return nil
   end
 
-  local blocks_data = context.data
-  local stats = context.stats
+  local blocks_data = context.data or {}
+  local stats = context.stats or {}
 
   -- Get the most recent block for additional details
   local last_block = blocks_data.blocks[#blocks_data.blocks]

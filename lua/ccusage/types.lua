@@ -66,8 +66,8 @@
 ---@field time_ratio number time progress ratio as float (0.0-1.0)
 
 ---@class CCUsage.FormatterContext
----@field data CCUsage.Data -- Raw JSON data from ccusage command
----@field stats CCUsage.Stats -- Pre-computed stats from data for convenience
+---@field data CCUsage.Data? -- Raw JSON data from ccusage command
+---@field stats CCUsage.Stats? -- Pre-computed stats from data for convenience
 
 -- lua/ccusage/utils.lua -------------------------------------------------------
 
