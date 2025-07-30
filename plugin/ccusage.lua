@@ -9,7 +9,7 @@ local function get_log_level(context)
     return vim.log.levels.INFO
   end
 
-  local stats = context.stats
+  local stats = context.stats or {}
 
   if stats.usage_ratio > 1.0 then
     return vim.log.levels.ERROR
@@ -28,7 +28,7 @@ local function get_title(context)
     return "CCUsage"
   end
 
-  local stats = context.stats
+  local stats = context.stats or {}
 
   if stats.usage_ratio > 1.0 or stats.usage_ratio >= 0.8 then
     return "CCUsage Warning"
@@ -62,7 +62,7 @@ local function status_cmd()
   end
 
   -- Format the data using the verbose formatter
-  local formatted_message = verbose_formatter.format(context)
+  local formatted_message = verbose_formatter(context)
   if not formatted_message then
     vim.notify("Unable to format usage statistics", vim.log.levels.WARN, {
       title = "CCUsage",
