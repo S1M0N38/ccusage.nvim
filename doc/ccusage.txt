@@ -58,7 +58,7 @@ Using lazy.nvim: ~
     -- Install and configure ccusage.nvim
     {
       "S1M0N38/ccusage.nvim",
-      version = "0.*",
+      version = "1.*",
       opts = {},
     }
 <

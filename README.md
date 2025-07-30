@@ -42,7 +42,7 @@ Install ccusage.nvim using your preferred plugin manager. Here's a complete conf
 -- Install and configure ccusage.nvim
 {
   "S1M0N38/ccusage.nvim",
-  version = "0.*",
+  version = "1.*",
   opts = {},
 }
 ```
