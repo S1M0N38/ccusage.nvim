@@ -9,7 +9,7 @@ local cache = {
   availability = { data = nil, timestamp = 0 },
 }
 
-local CACHE_TTL = 5000 -- 5 seconds in milliseconds
+local CACHE_TTL = 20000 -- 20 seconds in milliseconds
 
 ---Check if cached value is still valid
 ---@param cache_entry table cache entry with data and timestamp
