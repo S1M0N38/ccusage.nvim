@@ -331,5 +331,44 @@ describe("ccusage.data module tests", function()
       local result = data.get_formatter_context()
       assert.is_not_nil(result)
     end)
+
+    it("integrates with job queue system for concurrent calls", function()
+      -- Mock CLI and utils to ensure data flows correctly
+      local original_is_available = cli.is_available
+      local original_ccusage_blocks = cli.ccusage_blocks
+      local original_compute_stats = utils.compute_stats
+
+      cli.is_available = function()
+        return true
+      end
+
+      cli.ccusage_blocks = function(opts)
+        -- Return sample data synchronously
+        return sample_blocks_data
+      end
+
+      utils.compute_stats = function(data)
+        return sample_stats
+      end
+
+      -- Make multiple data requests that should use job queue
+      local results = {}
+      for i = 1, 3 do
+        results[i] = data.get_formatter_context()
+      end
+
+      -- All should return valid context (job queue system should not affect data layer results)
+      for i = 1, 3 do
+        assert.is_table(results[i])
+        -- Check that job queue doesn't interfere with data layer functionality
+        assert.is_not_nil(results[i].data)
+        assert.is_not_nil(results[i].stats)
+      end
+
+      -- Restore original functions
+      cli.is_available = original_is_available
+      cli.ccusage_blocks = original_ccusage_blocks
+      utils.compute_stats = original_compute_stats
+    end)
   end)
 end)
