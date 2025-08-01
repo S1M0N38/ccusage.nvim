@@ -43,41 +43,47 @@ local function status_cmd()
   local data = require("ccusage.data")
   local verbose_formatter = require("ccusage.formatters.verbose")
 
-  -- Get formatter context with unified error handling
-  local context = data.get_formatter_context()
+  -- Helper function to handle the formatted context
+  local function handle_context(context)
+    -- Handle errors with appropriate notifications
+    if not context.data then
+      vim.notify("ccusage CLI not found. Please install with: npm install -g ccusage", vim.log.levels.ERROR, {
+        title = "CCUsage Error",
+      })
+      return
+    end
 
-  -- Handle errors with appropriate notifications
-  if not context.data then
-    vim.notify("ccusage CLI not found. Please install with: npm install -g ccusage", vim.log.levels.ERROR, {
-      title = "CCUsage Error",
+    if not context.stats then
+      vim.notify("Unable to compute usage statistics", vim.log.levels.WARN, {
+        title = "CCUsage",
+      })
+      return
+    end
+
+    -- Format the data using the verbose formatter
+    local formatted_message = verbose_formatter(context)
+    if not formatted_message then
+      vim.notify("Unable to format usage statistics", vim.log.levels.WARN, {
+        title = "CCUsage",
+      })
+      return
+    end
+
+    -- Get appropriate log level and title
+    local level = get_log_level(context)
+    local title = get_title(context)
+
+    -- Show notification
+    vim.notify(formatted_message, level, {
+      title = title,
+      timeout = 5000, -- Show for 5 seconds
     })
-    return
   end
 
-  if not context.stats then
-    vim.notify("Unable to compute usage statistics", vim.log.levels.WARN, {
-      title = "CCUsage",
-    })
-    return
-  end
-
-  -- Format the data using the verbose formatter
-  local formatted_message = verbose_formatter(context)
-  if not formatted_message then
-    vim.notify("Unable to format usage statistics", vim.log.levels.WARN, {
-      title = "CCUsage",
-    })
-    return
-  end
-
-  -- Get appropriate log level and title
-  local level = get_log_level(context)
-  local title = get_title(context)
-
-  -- Show notification
-  vim.notify(formatted_message, level, {
-    title = title,
-    timeout = 10000, -- Show for 10 seconds
+  -- Get formatter context with bypass cache and callback
+  data.get_formatter_context({
+    bypass_cache = true,
+    callback = handle_context,
   })
 end
 
