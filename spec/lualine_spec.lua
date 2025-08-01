@@ -54,12 +54,28 @@ describe("ccusage lualine integration tests", function()
   end)
 
   describe("component behavior when CLI is unavailable", function()
+    it("returns 'loading...' message when CLI is being checked or data is being fetched", function()
+      -- Mock data module to return loading state
+      local data = require("ccusage.data")
+      local original_get_formatter_context = data.get_formatter_context
+      data.get_formatter_context = function()
+        return { data = nil, stats = nil, loading = true } -- Currently loading
+      end
+
+      local result = ccusage_component()
+
+      assert.are.equal("ccusage: loading...", result)
+
+      -- Restore original function
+      data.get_formatter_context = original_get_formatter_context
+    end)
+
     it("returns 'not found' message when ccusage CLI is not available", function()
       -- Mock data module to return no data
       local data = require("ccusage.data")
       local original_get_formatter_context = data.get_formatter_context
       data.get_formatter_context = function()
-        return { data = nil, stats = nil } -- CLI unavailable
+        return { data = nil, stats = nil, loading = false } -- CLI unavailable
       end
 
       local result = ccusage_component()
@@ -77,7 +93,7 @@ describe("ccusage lualine integration tests", function()
       local data = require("ccusage.data")
       local original_get_formatter_context = data.get_formatter_context
       data.get_formatter_context = function()
-        return { data = { blocks = {} }, stats = nil } -- Data but no stats
+        return { data = { blocks = {} }, stats = nil, loading = false } -- Data but no stats
       end
 
       local result = ccusage_component()
@@ -118,7 +134,7 @@ describe("ccusage lualine integration tests", function()
       local data = require("ccusage.data")
       local original_get_formatter_context = data.get_formatter_context
       data.get_formatter_context = function()
-        return { data = sample_data, stats = sample_stats }
+        return { data = sample_data, stats = sample_stats, loading = false }
       end
 
       local result = ccusage_component()
@@ -172,7 +188,7 @@ describe("ccusage lualine integration tests", function()
       local data = require("ccusage.data")
       local original_get_formatter_context = data.get_formatter_context
       data.get_formatter_context = function()
-        return { data = sample_data, stats = sample_stats }
+        return { data = sample_data, stats = sample_stats, loading = false }
       end
 
       -- Reload component to pick up new config
@@ -219,7 +235,7 @@ describe("ccusage lualine integration tests", function()
       local data = require("ccusage.data")
       local original_get_formatter_context = data.get_formatter_context
       data.get_formatter_context = function()
-        return { data = sample_data, stats = sample_stats }
+        return { data = sample_data, stats = sample_stats, loading = false }
       end
 
       -- Reload component to pick up new config
@@ -331,7 +347,7 @@ describe("ccusage lualine integration tests", function()
       local data = require("ccusage.data")
       local original_get_formatter_context = data.get_formatter_context
       data.get_formatter_context = function()
-        return { data = sample_data, stats = sample_stats }
+        return { data = sample_data, stats = sample_stats, loading = false }
       end
 
       -- Reload component to pick up new config
