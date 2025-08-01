@@ -7,7 +7,7 @@
     <a href="https://github.com/S1M0N38/ccusage.nvim/releases">
       <img alt="GitHub release" src="https://img.shields.io/github/v/release/S1M0N38/ccusage.nvim?style=for-the-badge&label=GitHub"/>
     </a>
-    <a href="">
+    <a href="https://www.reddit.com/r/neovim/comments/1mdba49/ccusagenvim_track_claude_code_usage_in_neovim/">
       <img alt="Reddit post" src="https://img.shields.io/badge/post-reddit?style=for-the-badge&label=Reddit&color=FF5700"/>
     </a>
   </p>
