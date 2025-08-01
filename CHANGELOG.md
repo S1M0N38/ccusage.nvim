@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.1](https://github.com/S1M0N38/ccusage.nvim/compare/v1.0.0...v1.0.1) (2025-08-01)
+
+
+### Bug Fixes
+
+* CCUsage not working on first call ([#5](https://github.com/S1M0N38/ccusage.nvim/issues/5)) ([5629118](https://github.com/S1M0N38/ccusage.nvim/commit/562911853231fe0aeaa0aa09ce5ccba825c96ad1))
+* increase cache ttl to 20 seconds ([6589a55](https://github.com/S1M0N38/ccusage.nvim/commit/6589a559a12857b208b70a8cc6d1cbfcb95b9cbb))
+
 ## 1.0.0 (2025-07-30)
 
 
