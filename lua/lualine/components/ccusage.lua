@@ -9,6 +9,11 @@ local function ccusage_component()
   -- Get formatter context with unified error handling
   local context = data.get_formatter_context()
 
+  -- Handle loading state
+  if context.loading then
+    return "ccusage: loading..."
+  end
+
   -- Handle errors with appropriate statusline messages
   if not context.data then
     return "ccusage: not found"

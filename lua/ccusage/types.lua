@@ -30,8 +30,8 @@
 -- lua/ccusage/cli.lua ---------------------------------------------------------
 
 ---@class CCUsage.CLI
----@field ccusage_blocks fun(): CCUsage.Data? get ccusage blocks data
----@field is_available fun(): boolean check if ccusage CLI is available
+---@field ccusage_blocks fun(opts?: {bypass_cache?: boolean, callback?: fun(data: CCUsage.Data?)}): CCUsage.Data? get ccusage blocks data
+---@field is_available fun(opts?: {bypass_cache?: boolean, callback?: fun(available: boolean)}): boolean check if ccusage CLI is available
 ---@field refresh_blocks fun(): CCUsage.Data? force refresh ccusage blocks data
 
 ---@class CCUsage.Block
@@ -68,6 +68,12 @@
 ---@class CCUsage.FormatterContext
 ---@field data CCUsage.Data? -- Raw JSON data from ccusage command
 ---@field stats CCUsage.Stats? -- Pre-computed stats from data for convenience
+---@field loading boolean -- Whether data is currently being loaded
+
+-- lua/ccusage/data.lua --------------------------------------------------------
+
+---@class CCUsage.DataModule
+---@field get_formatter_context fun(opts?: {bypass_cache?: boolean, callback?: fun(data?: CCUsage.FormatterContext)}): CCUsage.FormatterContext get formatter context with unified error handling
 
 -- lua/ccusage/utils.lua -------------------------------------------------------
 
