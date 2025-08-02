@@ -79,7 +79,6 @@ Enable the lualine component:
 ================================================================================
 CONFIGURATION                                                  *ccusage-config*
 
-                                                              *ccusage.setup()*
 ccusage.setup({opts}) ~
 
 The `ccusage.setup()` function configures the plugin with user-provided
