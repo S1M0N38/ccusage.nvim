@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.3](https://github.com/S1M0N38/ccusage.nvim/compare/v1.0.2...v1.0.3) (2025-08-02)
+
+
+### Bug Fixes
+
+* remove duplicated tag in doc ([46a6fb4](https://github.com/S1M0N38/ccusage.nvim/commit/46a6fb4607e1965ea4981c9b73a3e6251e3dc2c6))
+
 ## [1.0.2](https://github.com/S1M0N38/ccusage.nvim/compare/v1.0.1...v1.0.2) (2025-08-01)
 
 
